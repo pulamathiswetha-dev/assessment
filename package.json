@@ -1,13 +1,21 @@
 {
-  "name": "new_playwright_ai",
+  "name": "assessment",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pulamathiswetha-dev/assessment.git"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/pulamathiswetha-dev/assessment/issues"
+  },
+  "homepage": "https://github.com/pulamathiswetha-dev/assessment#readme",
   "devDependencies": {
     "@playwright/test": "^1.58.2",
     "@types/node": "^25.5.0"
