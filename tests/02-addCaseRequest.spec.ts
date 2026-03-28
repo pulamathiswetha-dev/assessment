@@ -17,7 +17,7 @@ test("Add Case Request", async ({ page }) => {
   await page.getByRole("textbox", { name: "Member Number" }).click();
   await page
     .getByRole("textbox", { name: "Member Number" })
-    .fill("1127127569-01");
+    .fill("25682743B-01");
   await page.getByRole("button", { name: "SEARCH MEMBER" }).click();
   await page.getByRole("radio").check();
   await page.getByRole("combobox", { name: "Referral Source" }).click();
