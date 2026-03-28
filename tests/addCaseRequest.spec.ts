@@ -1,7 +1,11 @@
 import { test, expect } from "@playwright/test";
+import { login } from "./helpers/auth";
 
 test("Add Case Request", async ({ page }) => {
+  await login(page);
   await page.getByRole("button", { name: "Case Management route_to" }).click();
+  await page.waitForTimeout(5000);
+  // await page.getByRole("button", { name: "Case Management route_to" }).click();
   await page.getByText("Add Case Request").click();
   await page.getByRole("textbox", { name: "Member Number" }).click();
   await page
