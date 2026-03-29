@@ -1,0 +1,20 @@
+Error: Cannot find module 'plain'
+Require stack:
+- /Users/sayyedchandbasha/Projects/assessment/node_modules/playwright/lib/program.js
+- /Users/sayyedchandbasha/Projects/assessment/node_modules/@playwright/test/cli.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1248:15)
+    at Function.resolve (node:internal/modules/helpers:145:19)
+    at resolveReporter (/Users/sayyedchandbasha/Projects/assessment/node_modules/playwright/lib/program.js:363:18)
+    at /Users/sayyedchandbasha/Projects/assessment/node_modules/playwright/lib/program.js:324:42
+    at Array.map (<anonymous>)
+    at resolveReporterOption (/Users/sayyedchandbasha/Projects/assessment/node_modules/playwright/lib/program.js:324:30)
+    at overridesFromOptions (/Users/sayyedchandbasha/Projects/assessment/node_modules/playwright/lib/program.js:283:15)
+    at runTests (/Users/sayyedchandbasha/Projects/assessment/node_modules/playwright/lib/program.js:196:24)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async i.<anonymous> (/Users/sayyedchandbasha/Projects/assessment/node_modules/playwright/lib/program.js:70:7) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/sayyedchandbasha/Projects/assessment/node_modules/playwright/lib/program.js',
+    '/Users/sayyedchandbasha/Projects/assessment/node_modules/@playwright/test/cli.js'
+  ]
+}
