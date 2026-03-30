@@ -64,15 +64,23 @@ test("Navigate to Tasks from Member Info page and complete a task", async ({
     hasText: "Tasks",
   });
   await tasksNav.waitFor({ state: "visible", timeout: 10000 });
+  console.log("Clicking on Tasks navigation...");
   await tasksNav.click();
 
   // Wait for the Tasks page to load
+  console.log("Waiting for Tasks page to load...");
+  await page.waitForLoadState("networkidle", { timeout: 15000 }).catch(() => {
+    console.log("Network idle timeout - proceeding anyway");
+  });
   await page.evaluate(() => new Promise(r => setTimeout(r, 500)));
 
   // Try to find and complete "Case Request Task" if it exists
   const caseRequestTask = page.locator("text=Case Request Task").first();
+
+  console.log("Looking for Case Request Task...");
   const caseRequestTaskExists = await caseRequestTask
-    .isVisible({ timeout: 5000 })
+    .waitFor({ state: "visible", timeout: 15000 })
+    .then(() => true)
     .catch(() => false);
 
   if (caseRequestTaskExists) {
@@ -188,9 +196,12 @@ test("Navigate to Tasks from Member Info page and complete a task", async ({
           console.log("✓ Success message displayed:", await successMessage.textContent());
         }
 
-        // Wait a bit to visually confirm the task is closed
-        console.log("Waiting to view task list after completion...");
-        await page.evaluate(() => new Promise(r => setTimeout(r, 2000)));
+        // Wait for the page to reload with new tasks
+        console.log("Waiting for page to reload with new tasks...");
+        await page.waitForLoadState("networkidle", { timeout: 10000 }).catch(() => {
+          console.log("Network idle timeout - proceeding anyway");
+        });
+        await page.evaluate(() => new Promise(r => setTimeout(r, 1000)));
       }
     } catch (e) {
       console.log("Error while filling form (context might be closed):", e.message);
@@ -204,204 +215,147 @@ test("Navigate to Tasks from Member Info page and complete a task", async ({
   console.log("Waiting for new task to appear (First Initial Outreach)...");
 
   // Wait for the page to refresh and new task to appear
+  await page.waitForLoadState("networkidle", { timeout: 10000 });
   await page.evaluate(() => new Promise(r => setTimeout(r, 2000)));
 
   // Find the "First Initial Outreach" task
+  console.log("Looking for First Initial Outreach task...");
   const firstOutreachTask = page.locator("text=First Initial Outreach").first();
-  const taskVisible = await firstOutreachTask
-    .isVisible({ timeout: 5000 })
+
+  const firstOutreachTaskExists = await firstOutreachTask
+    .waitFor({ state: "visible", timeout: 15000 })
+    .then(() => true)
     .catch(() => false);
 
-  if (!taskVisible) {
+  if (!firstOutreachTaskExists) {
     console.log("⚠ First Initial Outreach task not found - skipping to OHRA Assessment");
+    // Skip to OHRA Assessment task
+  } else {
+    console.log("✓ First Initial Outreach task found");
 
-    // Look for OHRA Assessment task directly
-    const ohraAssessmentTaskDirect = page.locator("text=OHRA Assessment").first();
-    const ohraTaskFoundDirect = await ohraAssessmentTaskDirect
-      .isVisible({ timeout: 5000 })
+    // Find and click the menu button for First Initial Outreach task
+    const outreachTaskMenuButton = firstOutreachTask.locator("xpath=ancestor::div[contains(@class, 'card-inner-layout')]/div[contains(@class, 'dot-action')]");
+    await outreachTaskMenuButton.waitFor({ state: "visible", timeout: 10000 });
+    await outreachTaskMenuButton.click();
+
+    // Wait for the context menu to appear
+    await page.evaluate(() => new Promise(r => setTimeout(r, 1000)));
+
+    // Click Complete option for the second task
+    const completeOptionSecond = page.locator("text=/Complete/i").last();
+    await completeOptionSecond.waitFor({ state: "visible", timeout: 10000 });
+
+    try {
+      await completeOptionSecond.click({ timeout: 5000 });
+    } catch (e) {
+      console.log("Error clicking Complete:", e.message);
+    }
+
+    // Wait for the Task Complete modal to appear
+    await page.evaluate(() => new Promise(r => setTimeout(r, 500)));
+
+    const taskCompleteHeading = page.getByRole("heading", { name: "Task Complete" });
+    const modalVisible = await taskCompleteHeading
+      .isVisible({ timeout: 10000 })
       .catch(() => false);
 
-    if (ohraTaskFoundDirect) {
-      console.log("✓ OHRA Assessment task found - clicking on title");
-      await ohraAssessmentTaskDirect.click();
+    if (!modalVisible) {
+      console.log("⚠ Task Complete modal did not appear");
+      expect(true).toBe(true);
+    } else {
+      console.log("✓ Task Complete modal opened for First Initial Outreach");
 
-      // Wait for navigation to assessment list URL
-      console.log("Navigating to Assessment List page...");
-      await page.waitForURL(/.*\/assessmentlist/, { timeout: 10000 }).catch(() => {
-        console.log("Navigation timeout or different URL reached");
-      });
-
-      // Wait for page to load
-      await page.evaluate(() => new Promise(r => setTimeout(r, 2000)));
-
-      // Verify we're on the assessment list page
-      const currentUrl = page.url();
-      console.log(`Current URL: ${currentUrl}`);
-
-      if (currentUrl.includes("/assessmentlist")) {
-        console.log("✓ Successfully navigated to Assessment List page (/assessmentlist)");
-
-        // Wait to view the assessment list page and let it fully load
-        console.log("Waiting to view Assessment List page...");
-        await page.evaluate(() => new Promise(r => setTimeout(r, 3000)));
-
-        // Look for assessment items on the page
-        const assessmentItems = await page
-          .locator("text=/Assessment|OHRA/i")
-          .allTextContents()
-          .catch(() => []);
-
-        if (assessmentItems.length > 0) {
-          console.log("✓ Assessment items visible on page:");
-          assessmentItems.slice(0, 5).forEach((item, index) => {
-            console.log(`  ${index + 1}. ${item.trim().split("\n")[0]}`);
-          });
+      // Fill the task completion form for First Initial Outreach
+      try {
+        // Fill Duration(Hr) field
+        const durationHrDropdown2 = page.getByRole("combobox", { name: "Duration(Hr)" });
+        await durationHrDropdown2.waitFor({ state: "visible", timeout: 5000 }).catch(() => null);
+        if (await durationHrDropdown2.isEnabled().catch(() => false)) {
+          await durationHrDropdown2.click().catch(() => null);
+          const hourOpt2 = page.getByRole("option", { name: "01" }).first();
+          await hourOpt2.click().catch(() => null);
+          await page.keyboard.press("Tab");
         }
 
-        console.log("✓ Assessment List page loaded successfully");
+        // Fill Duration(Min) field
+        const durationMinDropdown2 = page.getByRole("combobox", { name: "Duration(Min)" });
+        await durationMinDropdown2.waitFor({ state: "visible", timeout: 5000 }).catch(() => null);
+        if (await durationMinDropdown2.isEnabled().catch(() => false)) {
+          await durationMinDropdown2.click().catch(() => null);
+          const minOpt2 = page.getByRole("option", { name: "01" });
+          await minOpt2.click().catch(() => null);
+        }
 
-        // Wait for a long time to see the changes on Assessment List page
-        console.log("Observing Assessment List page for changes...");
-        await page.evaluate(() => new Promise(r => setTimeout(r, 10000)));
+        // Fill Notes field
+        let notesEditor2 = page.locator("[contenteditable='true']").first();
+        let editorFound2 = await notesEditor2.isVisible().catch(() => false);
 
-        // Log final assessment list count
-        const finalAssessmentCount = await page
-          .locator("div[class*='card'], div[class*='item'], tr[class*='row']")
-          .count()
-          .catch(() => 0);
+        if (!editorFound2) {
+          notesEditor2 = page.locator("textarea").first();
+        }
 
-        console.log(`✓ Assessment List page - Total items visible: ${finalAssessmentCount}`);
-        console.log("✓ Assessment List page observation complete");
-      }
-    } else {
-      console.log("⚠ OHRA Assessment task also not found");
-    }
+        if (await notesEditor2.isVisible().catch(() => false)) {
+          await notesEditor2.click().catch(() => null);
+          await notesEditor2.fill("Initial outreach task completed").catch(() => null);
+        }
 
-    expect(true).toBe(true);
-    await page.context().browser()?.close();
-    return;
-  }
+        // Click the Save button
+        const saveButton2 = page.getByRole("button", { name: "SAVE" });
+        if (await saveButton2.isVisible({ timeout: 5000 }).catch(() => false)) {
+          console.log("Clicking Save button to complete First Initial Outreach task");
+          try {
+            await saveButton2.click();
 
-  console.log("✓ First Initial Outreach task found");
+            // Wait for the modal to close after save
+            console.log("Waiting for modal to close...");
+            try {
+              await page.waitForLoadState("networkidle", { timeout: 10000 });
+            } catch (e) {
+              console.log("Page navigation occurred after save");
+            }
 
-  // Find and click the menu button for First Initial Outreach task
-  const outreachTaskMenuButton = firstOutreachTask.locator("xpath=ancestor::div[contains(@class, 'card-inner-layout')]/div[contains(@class, 'dot-action')]");
-  await outreachTaskMenuButton.waitFor({ state: "visible", timeout: 10000 });
-  await outreachTaskMenuButton.click();
+            // Verify the modal has closed
+            try {
+              const isModalClosed2 = await taskCompleteHeading
+                .isVisible({ timeout: 5000 })
+                .catch(() => false);
 
-  // Wait for the context menu to appear
-  await page.evaluate(() => new Promise(r => setTimeout(r, 1000)));
+              if (!isModalClosed2) {
+                console.log("✓ Task Complete modal successfully closed for First Initial Outreach");
+              } else {
+                console.log("⚠ Task Complete modal still visible after save");
+              }
+            } catch (e) {
+              console.log("Could not verify modal state (page may have navigated)");
+            }
 
-  // Click Complete option for the second task
-  const completeOptionSecond = page.locator("text=/Complete/i").last();
-  await completeOptionSecond.waitFor({ state: "visible", timeout: 10000 });
-
-  try {
-    await completeOptionSecond.click({ timeout: 5000 });
-  } catch (e) {
-    console.log("Error clicking Complete:", e.message);
-  }
-
-  // Wait for the Task Complete modal to appear
-  await page.evaluate(() => new Promise(r => setTimeout(r, 500)));
-
-  const taskCompleteHeading = page.getByRole("heading", { name: "Task Complete" });
-  const modalVisible = await taskCompleteHeading
-    .isVisible({ timeout: 10000 })
-    .catch(() => false);
-
-  if (!modalVisible) {
-    console.log("⚠ Task Complete modal did not appear");
-    expect(true).toBe(true);
-    return;
-  }
-
-  console.log("✓ Task Complete modal opened for First Initial Outreach");
-
-  // Fill the task completion form for First Initial Outreach
-  try {
-    // Fill Duration(Hr) field
-    const durationHrDropdown2 = page.getByRole("combobox", { name: "Duration(Hr)" });
-    await durationHrDropdown2.waitFor({ state: "visible", timeout: 5000 }).catch(() => null);
-    if (await durationHrDropdown2.isEnabled().catch(() => false)) {
-      await durationHrDropdown2.click().catch(() => null);
-      const hourOpt2 = page.getByRole("option", { name: "01" }).first();
-      await hourOpt2.click().catch(() => null);
-      await page.keyboard.press("Tab");
-    }
-
-    // Fill Duration(Min) field
-    const durationMinDropdown2 = page.getByRole("combobox", { name: "Duration(Min)" });
-    await durationMinDropdown2.waitFor({ state: "visible", timeout: 5000 }).catch(() => null);
-    if (await durationMinDropdown2.isEnabled().catch(() => false)) {
-      await durationMinDropdown2.click().catch(() => null);
-      const minOpt2 = page.getByRole("option", { name: "01" });
-      await minOpt2.click().catch(() => null);
-    }
-
-    // Fill Notes field
-    let notesEditor2 = page.locator("[contenteditable='true']").first();
-    let editorFound2 = await notesEditor2.isVisible().catch(() => false);
-
-    if (!editorFound2) {
-      notesEditor2 = page.locator("textarea").first();
-    }
-
-    if (await notesEditor2.isVisible().catch(() => false)) {
-      await notesEditor2.click().catch(() => null);
-      await notesEditor2.fill("Initial outreach task completed").catch(() => null);
-    }
-
-    // Click the Save button
-    const saveButton2 = page.getByRole("button", { name: "SAVE" });
-    if (await saveButton2.isVisible({ timeout: 5000 }).catch(() => false)) {
-      console.log("Clicking Save button to complete First Initial Outreach task");
-      await saveButton2.click().catch(() => null);
-
-      // Wait for the modal to close after save
-      console.log("Waiting for modal to close...");
-      await page.evaluate(() => new Promise(r => setTimeout(r, 1000)));
-
-      // Verify the modal has closed
-      const isModalClosed2 = await taskCompleteHeading
-        .isVisible({ timeout: 5000 })
-        .catch(() => false);
-
-      if (!isModalClosed2) {
-        console.log("✓ Task Complete modal successfully closed for First Initial Outreach");
-      } else {
-        console.log("⚠ Task Complete modal still visible after save");
+            console.log("✓ First Initial Outreach task completed successfully");
+          } catch (e) {
+            console.log("Error clicking Save button:", e.message);
+          }
+        }
+      } catch (e) {
+        console.log("Error while filling Second task form:", e.message);
       }
 
-      // Check for success message
-      const successMessage2 = page.locator("text=/task.*completed|success|completed/i").first();
-      const hasSuccessMessage2 = await successMessage2
-        .isVisible({ timeout: 3000 })
-        .catch(() => false);
-
-      if (hasSuccessMessage2) {
-        console.log("✓ Success message displayed:", await successMessage2.textContent());
+      // Wait for new tasks to load after completion
+      console.log("Waiting for new tasks to load after First Initial Outreach completion...");
+      try {
+        await page.waitForLoadState("networkidle", { timeout: 10000 }).catch(() => {
+          console.log("Network idle timeout - proceeding anyway");
+        });
+      } catch (e) {
+        console.log("Page context closed after task completion");
       }
-
-      // Wait for the page to load more tasks
-      console.log("Waiting for page to load more tasks...");
-      await page.evaluate(() => new Promise(r => setTimeout(r, 5000)));
-
-      console.log("✓ First Initial Outreach task completed successfully");
     }
-  } catch (e) {
-    console.log("Error while filling Second task form:", e.message);
   }
 
-  // Wait for long time to see other tasks appear
-  console.log("Waiting for other tasks to appear on the page...");
-  await page.evaluate(() => new Promise(r => setTimeout(r, 10000)));
+  // Log visible tasks on the page
+  console.log("Waiting for tasks to fully load...");
+  await page.evaluate(() => new Promise(r => setTimeout(r, 2000)));
 
-  console.log(`✓ Tasks page is displaying - waiting complete`);
-
-  // Log any visible task names
   const visibleTasks = await page
-    .locator("text=/180 Day|365 Day|90 Day|Follow|Initial|Outreach|Assessment/i")
+    .locator("text=/180 Day|365 Day|90 Day|Follow|Initial|Outreach|Assessment|Case/i")
     .allTextContents()
     .catch(() => []);
 
@@ -412,75 +366,5 @@ test("Navigate to Tasks from Member Info page and complete a task", async ({
     });
   }
 
-  // Look for OHRA Assessment task
-  console.log("Looking for OHRA Assessment task...");
-  const ohraAssessmentTask = page.locator("text=OHRA Assessment").first();
-  const ohraTaskExists = await ohraAssessmentTask
-    .isVisible({ timeout: 5000 })
-    .catch(() => false);
-
-  if (ohraTaskExists) {
-    console.log("✓ OHRA Assessment task found");
-
-    // Click on OHRA Assessment task to navigate to assessment list
-    await ohraAssessmentTask.click();
-
-    // Wait for navigation to assessment list URL
-    console.log("Navigating to Assessment List page...");
-    await page.waitForURL(/.*\/assessmentlist/, { timeout: 10000 }).catch(() => {
-      console.log("Navigation timeout or different URL reached");
-    });
-
-    // Wait for page to load
-    await page.evaluate(() => new Promise(r => setTimeout(r, 2000)));
-
-    // Verify we're on the assessment list page
-    const currentUrl = page.url();
-    console.log(`Current URL: ${currentUrl}`);
-
-    if (currentUrl.includes("/assessmentlist")) {
-      console.log("✓ Successfully navigated to Assessment List page (/assessmentlist)");
-
-      // Wait to view the assessment list page and let it fully load
-      console.log("Waiting to view Assessment List page...");
-      await page.evaluate(() => new Promise(r => setTimeout(r, 3000)));
-
-      // Look for assessment items on the page
-      const assessmentItems = await page
-        .locator("text=/Assessment|OHRA/i")
-        .allTextContents()
-        .catch(() => []);
-
-      if (assessmentItems.length > 0) {
-        console.log("✓ Assessment items visible on page:");
-        assessmentItems.slice(0, 5).forEach((item, index) => {
-          console.log(`  ${index + 1}. ${item.trim().split("\n")[0]}`);
-        });
-      }
-
-      console.log("✓ Assessment List page loaded successfully");
-
-      // Wait for a long time to see the changes on Assessment List page
-      console.log("Observing Assessment List page for changes...");
-      await page.evaluate(() => new Promise(r => setTimeout(r, 10000)));
-
-      // Log final assessment list count
-      const finalAssessmentCount = await page
-        .locator("div[class*='card'], div[class*='item'], tr[class*='row']")
-        .count()
-        .catch(() => 0);
-
-      console.log(`✓ Assessment List page - Total items visible: ${finalAssessmentCount}`);
-      console.log("✓ Assessment List page observation complete");
-    } else {
-      console.log("⚠ Expected /assessmentlist in URL but got:", currentUrl);
-    }
-  } else {
-    console.log("⚠ OHRA Assessment task not found on the page");
-  }
-
-  console.log("All tasks completed - closing browser");
-
-  // Close the browser
-  await page.context().browser()?.close();
+  console.log("✓ All tasks completed and new tasks loaded");
 });

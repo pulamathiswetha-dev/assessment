@@ -146,7 +146,4 @@ test("Click on Member name and navigate to Member Info page", async ({
 
   // Wait for some time to view the member info screen
   await page.waitForTimeout(3000);
-
-  // Close the browser (test cleanup)
-  await page.context().browser()?.close();
 });
