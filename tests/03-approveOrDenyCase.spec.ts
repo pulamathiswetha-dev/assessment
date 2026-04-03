@@ -1,12 +1,13 @@
 import { test, expect } from "@playwright/test";
-import { login } from "./helpers/auth";
 import { navigateToCaseRequestList, searchCaseById } from "./helpers/navigation";
 import { fillApproveRequestForm, findAndClickApproveButton } from "./helpers/forms";
 import { getCaseIdFromFile } from "./helpers/fileHelper";
+import { BASE_URL } from "./helpers/config";
 
 test.describe("Approve or Deny Case", () => {
   test.beforeEach(async ({ page }) => {
-    await login(page);
+    // Navigate to app first (auth state will be automatically loaded)
+    await page.goto(BASE_URL);
     await navigateToCaseRequestList(page);
   });
 

@@ -1,13 +1,16 @@
 import { test, expect } from "@playwright/test";
-import { login } from "./helpers/auth";
 import { getCaseIdFromFile } from "./helpers/fileHelper";
+import { BASE_URL } from "./helpers/config";
 
 test("Navigate to Member List from side navigation", async ({ page }) => {
-  // Login
-  await login(page);
+  // Navigate to app first (auth state will be automatically loaded)
+  await page.goto(BASE_URL);
 
   // Navigate to Case Management
-  await page.getByRole("button", { name: "Case Management route_to" }).click();
+  const caseManagementButton = page.getByRole("button", { name: "Case Management route_to" });
+  await caseManagementButton.waitFor({ state: "visible", timeout: 30000 });
+  await caseManagementButton.click();
+  await page.waitForLoadState("networkidle");
 
   // Click on Member List in the side navigation
   const memberListNav = page.locator("span.nav-text", {
@@ -30,11 +33,14 @@ test("Navigate to Member List from side navigation", async ({ page }) => {
 });
 
 test("Search for case by Case ID in Member List", async ({ page }) => {
-  // Login
-  await login(page);
+  // Navigate to app first (auth state will be automatically loaded)
+  await page.goto(BASE_URL);
 
   // Navigate to Case Management
-  await page.getByRole("button", { name: "Case Management route_to" }).click();
+  const caseManagementButton = page.getByRole("button", { name: "Case Management route_to" });
+  await caseManagementButton.waitFor({ state: "visible", timeout: 30000 });
+  await caseManagementButton.click();
+  await page.waitForLoadState("networkidle");
 
   // Navigate to Member List
   const memberListNav = page.locator("span.nav-text", {
@@ -83,11 +89,14 @@ test("Search for case by Case ID in Member List", async ({ page }) => {
 test("Click on Member name and navigate to Member Info page", async ({
   page,
 }) => {
-  // Login
-  await login(page);
+  // Navigate to app first (auth state will be automatically loaded)
+  await page.goto(BASE_URL);
 
   // Navigate to Case Management
-  await page.getByRole("button", { name: "Case Management route_to" }).click();
+  const caseManagementButton = page.getByRole("button", { name: "Case Management route_to" });
+  await caseManagementButton.waitFor({ state: "visible", timeout: 30000 });
+  await caseManagementButton.click();
+  await page.waitForLoadState("networkidle");
 
   // Navigate to Member List
   const memberListNav = page.locator("span.nav-text", {

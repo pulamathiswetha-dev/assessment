@@ -1,6 +1,11 @@
 import { Page } from "@playwright/test";
 
 export async function navigateToCaseManagement(page: Page) {
+  // Navigate to app if not already there (auth state will be applied automatically)
+  if (page.url() === "about:blank") {
+    await page.goto("https://dentalpayer.health3d.ai/");
+  }
+
   const caseManagementButton = page.getByRole("button", {
     name: "Case Management route_to",
   });

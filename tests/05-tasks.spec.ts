@@ -1,12 +1,14 @@
 import { test, expect, Page } from "@playwright/test";
-import { login } from "./helpers/auth";
 import { getCaseIdFromFile } from "./helpers/fileHelper";
 import { completeTask } from "./helpers/taskHelper";
+import { BASE_URL } from "./helpers/config";
 
 // Helper function to navigate to Tasks page
 async function navigateToTasksPage(page: Page) {
-  // Login
-  await login(page);
+  // Navigate to app first if not already there
+  if (page.url() === "about:blank") {
+    await page.goto(BASE_URL);
+  }
 
   // Navigate to Case Management
   await page.getByRole("button", { name: "Case Management route_to" }).click();
@@ -76,6 +78,7 @@ async function navigateToTasksPage(page: Page) {
 }
 
 test("Step 1: Launch the page and navigate to Tasks", async ({ page }) => {
+  await page.goto(BASE_URL);
   await navigateToTasksPage(page);
 
   // // Verify we can see tasks
@@ -84,6 +87,7 @@ test("Step 1: Launch the page and navigate to Tasks", async ({ page }) => {
 });
 
 test("Step 2: Complete Case Request Task", async ({ page }) => {
+  await page.goto(BASE_URL);
   await navigateToTasksPage(page);
 
   await completeTask(page, "Case Request Task", "Task completed successfully");
@@ -94,6 +98,7 @@ test("Step 2: Complete Case Request Task", async ({ page }) => {
 });
 
 test("Step 3: Complete First Initial Outreach Task", async ({ page }) => {
+  await page.goto(BASE_URL);
   await navigateToTasksPage(page);
 
   // Wait for tasks to load

@@ -1,11 +1,15 @@
 import { expect, Page } from "@playwright/test";
 
+const BASE_URL = process.env.BASE_URL || "https://dentalpayer.health3d.ai/";
+const USERNAME = process.env.USERNAME || "";
+const PASSWORD = process.env.PASSWORD || "";
+
 export async function login(page: Page) {
-  await page.goto("https://dentalpayer.health3d.ai/");
+  await page.goto(BASE_URL);
   await page.getByRole("button", { name: "Start" }).click();
-  await page.locator("#i0116").fill("casemanager2@careassistantb2c.onmicrosoft.com");
+  await page.locator("#i0116").fill(USERNAME);
   await page.getByRole("button", { name: "Next" }).click();
-  await page.locator("#i0118").fill("Commonpassword$0724");
+  await page.locator("#i0118").fill(PASSWORD);
   await page.getByRole("button", { name: "Sign in" }).click();
   await page.getByRole("button", { name: "Yes" }).click();
 

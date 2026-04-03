@@ -1,13 +1,15 @@
 import { test, expect } from "@playwright/test";
-import { login } from "./helpers/auth";
 import { navigateToAddCaseRequest, searchMemberByNumber, selectMemberFromResults, selectReferralSource } from "./helpers/navigation";
 import { writeFileSync } from "fs";
+import { BASE_URL } from "./helpers/config";
 
 test.describe("Add Case Request", () => {
   const MEMBER_NUMBER = "25682743B-01";
+  // const MEMBER_NUMBER = "1127127569-01";
 
   test.beforeEach(async ({ page }) => {
-    await login(page);
+    // Navigate to app first (auth state will be automatically loaded)
+    await page.goto(BASE_URL);
     await navigateToAddCaseRequest(page);
   });
 

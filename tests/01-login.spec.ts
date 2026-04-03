@@ -1,25 +1,11 @@
 import { test, expect } from "@playwright/test";
-import { login } from "./helpers/auth";
+import { BASE_URL } from "./helpers/config";
 
 test.describe("Login Flow", () => {
-  test("Navigate to login page", async ({ page }) => {
-    await page.goto("https://dentalpayer.health3d.ai/");
-
-    // Verify the login page is loaded
-    const startButton = page.getByRole("button", { name: "Start" });
-    await startButton.waitFor({ state: "visible", timeout: 30000 });
-    await expect(startButton).toBeVisible({ timeout: 30000 });
-  });
-
-  test("Login with valid credentials", async ({ page }) => {
-    await login(page);
-
-    // Verify login was successful
-    await expect(page).toHaveURL(/.*health3d\.ai.*/);
-  });
 
   test("Verify user is authenticated after login", async ({ page }) => {
-    await login(page);
+    // Navigate to app (auth state will be automatically loaded by Playwright)
+    await page.goto(BASE_URL);
 
     // Verify the Case Management button is visible (indicates successful authentication)
     const caseManagementButton = page.getByRole("button", {
@@ -30,7 +16,8 @@ test.describe("Login Flow", () => {
   });
 
   test("Navigate to Case Management dashboard", async ({ page }) => {
-    await login(page);
+    // Navigate to app (auth state will be automatically loaded by Playwright)
+    await page.goto(BASE_URL);
 
     // Click on Case Management button
     const caseManagementButton = page.getByRole("button", {
@@ -46,7 +33,8 @@ test.describe("Login Flow", () => {
   });
 
   test("Verify dashboard navigation options are visible", async ({ page }) => {
-    await login(page);
+    // Navigate to app (auth state will be automatically loaded by Playwright)
+    await page.goto(BASE_URL);
 
     // Navigate to Case Management
     const caseManagementButton = page.getByRole("button", {

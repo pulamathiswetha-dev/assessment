@@ -1,11 +1,13 @@
 import { test, expect, Page } from "@playwright/test";
-import { login } from "./helpers/auth";
 import { getCaseIdFromFile } from "./helpers/fileHelper";
+import { BASE_URL } from "./helpers/config";
 
 // Helper function to navigate to Assessment List page and click Start on the Assessment
 async function navigateToAssessmentList(page: Page) {
-  // Login
-  await login(page);
+  // Navigate to app first if not already there
+  if (page.url() === "about:blank") {
+    await page.goto(BASE_URL);
+  }
 
   // Navigate to Case Management
   await page.getByRole("button", { name: "Case Management route_to" }).click();
@@ -81,12 +83,14 @@ async function clickAssessmentStartButton(page: Page) {
 test("Step 1: Launch the page and navigate to AssessmentList", async ({
   page,
 }) => {
+  await page.goto("https://dentalpayer.health3d.ai/");
   await navigateToAssessmentList(page);
 });
 
 test("Step 2: Find OHRA Adult Assessment and Click Start button", async ({
   page,
 }) => {
+  await page.goto("https://dentalpayer.health3d.ai/");
   await navigateToAssessmentList(page);
   await clickAssessmentStartButton(page);
 });
@@ -94,6 +98,7 @@ test("Step 2: Find OHRA Adult Assessment and Click Start button", async ({
 test("Step 2: Find OHRA Adult Assessment is loaded or not", async ({
   page,
 }) => {
+  await page.goto("https://dentalpayer.health3d.ai/");
   await navigateToAssessmentList(page);
   await clickAssessmentStartButton(page);
   await expect(page).toHaveURL(/.*assessment.*/);
