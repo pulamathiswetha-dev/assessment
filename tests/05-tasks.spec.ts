@@ -77,8 +77,11 @@ async function navigateToTasksPage(page: Page) {
   await page.evaluate(() => new Promise(r => setTimeout(r, 500)));
 }
 
-test("Step 1: Launch the page and navigate to Tasks", async ({ page }) => {
+test.beforeEach(async ({ page }) => {
   await page.goto(BASE_URL);
+});
+
+test("Step 1: Launch the page and navigate to Tasks", async ({ page }) => {
   await navigateToTasksPage(page);
 
   // // Verify we can see tasks
@@ -87,7 +90,6 @@ test("Step 1: Launch the page and navigate to Tasks", async ({ page }) => {
 });
 
 test("Step 2: Complete Case Request Task", async ({ page }) => {
-  await page.goto(BASE_URL);
   await navigateToTasksPage(page);
 
   await completeTask(page, "Case Request Task", "Task completed successfully");
@@ -98,7 +100,6 @@ test("Step 2: Complete Case Request Task", async ({ page }) => {
 });
 
 test("Step 3: Complete First Initial Outreach Task", async ({ page }) => {
-  await page.goto(BASE_URL);
   await navigateToTasksPage(page);
 
   // Wait for tasks to load

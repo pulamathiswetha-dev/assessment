@@ -2,9 +2,12 @@ import { test, expect } from "@playwright/test";
 import { getCaseIdFromFile } from "./helpers/fileHelper";
 import { BASE_URL } from "./helpers/config";
 
-test("Navigate to Member List from side navigation", async ({ page }) => {
+test.beforeEach(async ({ page }) => {
   // Navigate to app first (auth state will be automatically loaded)
   await page.goto(BASE_URL);
+});
+
+test("Navigate to Member List from side navigation", async ({ page }) => {
 
   // Navigate to Case Management
   const caseManagementButton = page.getByRole("button", { name: "Case Management route_to" });
@@ -33,9 +36,6 @@ test("Navigate to Member List from side navigation", async ({ page }) => {
 });
 
 test("Search for case by Case ID in Member List", async ({ page }) => {
-  // Navigate to app first (auth state will be automatically loaded)
-  await page.goto(BASE_URL);
-
   // Navigate to Case Management
   const caseManagementButton = page.getByRole("button", { name: "Case Management route_to" });
   await caseManagementButton.waitFor({ state: "visible", timeout: 30000 });
@@ -89,9 +89,6 @@ test("Search for case by Case ID in Member List", async ({ page }) => {
 test("Click on Member name and navigate to Member Info page", async ({
   page,
 }) => {
-  // Navigate to app first (auth state will be automatically loaded)
-  await page.goto(BASE_URL);
-
   // Navigate to Case Management
   const caseManagementButton = page.getByRole("button", { name: "Case Management route_to" });
   await caseManagementButton.waitFor({ state: "visible", timeout: 30000 });
