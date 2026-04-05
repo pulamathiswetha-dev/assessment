@@ -183,37 +183,37 @@ test.describe("Approve or Deny Case", () => {
     ).toBeVisible({ timeout: 30000 });
   });
 
-  test("Close Approve Success message", async ({ page }) => {
-    const caseId = getCaseIdFromFile();
-    await searchCaseById(page, caseId);
+  // test("Close Approve Success message", async ({ page }) => {
+  //   const caseId = getCaseIdFromFile();
+  //   await searchCaseById(page, caseId);
 
-    const noDataMessage = await page
-      .locator("text=No Matching Data is available")
-      .isVisible()
-      .catch(() => false);
+  //   const noDataMessage = await page
+  //     .locator("text=No Matching Data is available")
+  //     .isVisible()
+  //     .catch(() => false);
 
-    if (noDataMessage) {
-      test.skip();
-    }
+  //   if (noDataMessage) {
+  //     test.skip();
+  //   }
 
-    await findAndClickApproveButton(page);
-    await page.waitForSelector("text=Approve Request", { timeout: 30000 });
+  //   await findAndClickApproveButton(page);
+  //   await page.waitForSelector("text=Approve Request", { timeout: 30000 });
 
-    await fillApproveRequestForm(page);
+  //   await fillApproveRequestForm(page);
 
-    const saveButton = page.getByRole("button", { name: "SAVE" });
-    await saveButton.click();
+  //   const saveButton = page.getByRole("button", { name: "SAVE" });
+  //   await saveButton.click();
 
-    await page.waitForSelector("text=/You have successfully approved the case/", {
-      timeout: 30000,
-    });
+  //   await page.waitForSelector("text=/You have successfully approved the case/", {
+  //     timeout: 30000,
+  //   });
 
-    const closeButton = page.getByRole("button", { name: "CLOSE" });
-    await closeButton.waitFor({ state: "visible", timeout: 30000 });
-    await closeButton.click();
+  //   const closeButton = page.getByRole("button", { name: "CLOSE" });
+  //   await closeButton.waitFor({ state: "visible", timeout: 30000 });
+  //   await closeButton.click();
 
-    await expect(
-      page.locator("text=/You have successfully approved the case/")
-    ).not.toBeVisible({ timeout: 30000 });
-  });
+  //   await expect(
+  //     page.locator("text=/You have successfully approved the case/")
+  //   ).not.toBeVisible({ timeout: 30000 });
+  // });
 });

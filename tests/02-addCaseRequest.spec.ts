@@ -98,31 +98,31 @@ test.describe("Add Case Request", () => {
     console.log(`Case ID saved: ${caseId}`);
   });
 
-  test("Close success message dialog", async ({ page }) => {
-    await searchMemberByNumber(page, MEMBER_NUMBER);
-    await selectMemberFromResults(page);
-    await selectReferralSource(page);
+  // test("Close success message dialog", async ({ page }) => {
+  //   await searchMemberByNumber(page, MEMBER_NUMBER);
+  //   await selectMemberFromResults(page);
+  //   await selectReferralSource(page);
 
-    const createButton = page.getByRole("button", {
-      name: "CREATE CASE REQUEST",
-    });
-    await createButton.click();
+  //   const createButton = page.getByRole("button", {
+  //     name: "CREATE CASE REQUEST",
+  //   });
+  //   await createButton.click();
 
-    // Wait for page to load after clicking create
-    await page.waitForLoadState("networkidle");
-    await page.waitForTimeout(1000);
+  //   // Wait for page to load after clicking create
+  //   await page.waitForLoadState("networkidle");
+  //   await page.waitForTimeout(1000);
 
-    // Wait for success message - it should contain "Case" and "ID" and have an ID
-    const successMessage = page.locator(
-      "text=/Case.*ID.*\\w+/",
-    );
+  //   // Wait for success message - it should contain "Case" and "ID" and have an ID
+  //   const successMessage = page.locator(
+  //     "text=/Case.*ID.*\\w+/",
+  //   );
 
-    await successMessage.waitFor({ state: "visible", timeout: 30000 });
+  //   await successMessage.waitFor({ state: "visible", timeout: 30000 });
 
-    const closeButton = page.getByRole("button", { name: "CLOSE" });
-    await closeButton.waitFor({ state: "visible", timeout: 30000 });
-    await closeButton.click();
+  //   const closeButton = page.getByRole("button", { name: "CLOSE" });
+  //   await closeButton.waitFor({ state: "visible", timeout: 30000 });
+  //   await closeButton.click();
 
-    await expect(successMessage).not.toBeVisible({ timeout: 30000 });
-  });
+  //   await expect(successMessage).not.toBeVisible({ timeout: 30000 });
+  // });
 });

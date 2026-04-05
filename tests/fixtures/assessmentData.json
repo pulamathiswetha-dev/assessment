@@ -1,0 +1,331 @@
+[
+  {
+    "section_name": "Contact Information",
+    "fields": [
+      {
+        "field_display_order": 1,
+        "field_name": "1001",
+        "field_ui_label": "What is the Conversation ID?",
+        "field_ui_control": "text",
+        "field_selected_value": ["123"],
+        "required": true
+      },
+      {
+        "field_display_order": 2,
+        "field_name": "1002",
+        "field_ui_label": "What is the type of contact?",
+        "field_ui_control": "radio",
+        "field_original_options": ["Inbound", "Outbound"],
+        "field_selected_value": ["Inbound"],
+        "required": true
+      },
+      {
+        "field_display_order": 3,
+        "field_name": "1003",
+        "field_ui_label": "What is the contact method?",
+        "field_ui_control": "radio",
+        "field_original_options": ["Phone Call", "Email", "Fax", "Other"],
+        "field_selected_value": ["Phone Call"],
+        "field_selected_value_response": ["1234567890"],
+        "required": true
+      },
+      {
+        "field_display_order": 4,
+        "field_name": "1004",
+        "field_ui_label": "Who is the contact person?",
+        "field_ui_control": "radio",
+        "field_original_options": ["Self", "Brother", "Daughter", "Father", "Mother", "Sister", "Son", "Other"],
+        "field_selected_value": ["Self"],
+        "required": true
+      },
+      {
+        "field_display_order": 5,
+        "field_name": "1005",
+        "field_ui_label": "What is the contact's phone number?",
+        "field_ui_control": "text",
+        "field_ui_type": "tel",
+        "field_selected_value": ["1234567890"],
+        "required": true
+      },
+      {
+        "field_display_order": 6,
+        "field_name": "1006",
+        "field_ui_label": "What is the member's preferred contact phone number?",
+        "field_ui_control": "text",
+        "field_ui_type": "tel",
+        "field_selected_value": ["1234567890"],
+        "required": true
+      }
+    ]
+  },
+  {
+    "section_name": "Health Information",
+    "fields": [
+      {
+        "field_display_order": 7,
+        "field_name": "1007",
+        "field_ui_label": "Has it been more than 12 months since you last saw a dentist?",
+        "field_ui_control": "radio",
+        "field_original_options": ["Yes", "No"],
+        "field_selected_value": ["Yes"]
+      },
+      {
+        "field_display_order": 8,
+        "field_name": "1008",
+        "field_ui_label": "Do your teeth hurt when eating cold, hot, or sugary foods?",
+        "field_ui_control": "radio",
+        "field_original_options": ["Yes", "No"],
+        "field_selected_value": ["Yes"]
+      },
+      {
+        "field_display_order": 9,
+        "field_name": "1009",
+        "field_ui_label": "Do you have pain in your mouth or gums?",
+        "field_ui_control": "radio",
+        "field_original_options": ["Yes", "No"],
+        "field_selected_value": ["Yes"]
+      },
+      {
+        "field_display_order": 10,
+        "field_name": "1010",
+        "field_ui_label": "Do you have an infected tooth or teeth?",
+        "field_ui_control": "radio",
+        "field_original_options": ["Yes", "No"],
+        "field_selected_value": ["Yes"]
+      },
+      {
+        "field_display_order": 11,
+        "field_name": "1011",
+        "field_ui_label": "Do you have a broken tooth or teeth?",
+        "field_ui_control": "radio",
+        "field_original_options": ["Yes", "No"],
+        "field_selected_value": ["No"]
+      },
+      {
+        "field_display_order": 12,
+        "field_name": "10012",
+        "field_ui_label": "Is your mouth dry?",
+        "field_ui_control": "radio",
+        "field_original_options": ["Yes", "No"],
+        "field_selected_value": ["No"]
+      },
+      {
+        "field_display_order": 13,
+        "field_name": "1013",
+        "field_ui_label": "Do your gums bleed when you brush or floss?",
+        "field_ui_control": "radio",
+        "field_original_options": ["Yes", "No"],
+        "field_selected_value": ["No"]
+      },
+      {
+        "field_display_order": 14,
+        "field_name": "1014",
+        "field_ui_label": "Have you had any gum (periodontal) treatments?",
+        "field_ui_control": "radio",
+        "field_original_options": ["Yes", "No"],
+        "field_selected_value": ["No"]
+      },
+      {
+        "field_display_order": 15,
+        "field_name": "1016",
+        "field_ui_label": "Do you wear full or partial fake teeth?",
+        "field_ui_control": "radio",
+        "field_original_options": ["Yes", "No"],
+        "field_selected_value": ["Yes"]
+      },
+      {
+        "field_display_order": 16,
+        "field_name": "1017",
+        "field_ui_label": "Are you pregnant?",
+        "field_ui_control": "radio",
+        "field_original_options": ["Yes", "No"],
+        "field_selected_value": ["No"]
+      },
+      {
+        "field_display_order": 17,
+        "field_name": "1018",
+        "field_ui_label": "Do you see a doctor often for a serious medical condition?",
+        "field_ui_control": "radio",
+        "field_original_options": ["Yes", "No"],
+        "field_selected_value": ["Yes"]
+      },
+      {
+        "field_display_order": 18,
+        "field_name": "1019",
+        "field_ui_label": "Select all that apply",
+        "field_dependency": "1018",
+        "field_visible_only": ["Yes"],
+        "field_ui_control": "radio-multiple",
+        "field_original_options": ["Cancer", "Diabetes", "Kidney Disease", "Other"],
+        "field_selected_value": ["Cancer"]
+      },
+      {
+        "field_display_order": 19,
+        "field_name": "1020",
+        "field_ui_label": "Are you currently receiving radiation or chemotherapy?",
+        "field_ui_control": "radio",
+        "field_original_options": ["Yes", "No"],
+        "field_selected_value": ["Yes"]
+      },
+      {
+        "field_display_order": 20,
+        "field_name": "1021",
+        "field_ui_label": "Do you have or have been told that you have a mental, behavioral, or physical disability?",
+        "field_ui_control": "radio",
+        "field_original_options": ["Yes", "No"],
+        "field_selected_value": ["Yes"]
+      },
+      {
+        "field_display_order": 21,
+        "field_name": "1022",
+        "field_ui_label": "Have you been to the emergency room for dental problems in the past year?",
+        "field_ui_control": "radio",
+        "field_original_options": ["Yes", "No"],
+        "field_selected_value_response_visible_only": ["Yes"],
+        "field_selected_value": ["Yes"],
+        "field_selected_value_response": ["tesrt"]
+      },
+      {
+        "field_display_order": 22,
+        "field_name": "1023",
+        "field_ui_label": "Are there any non-medical/social conditions that would affect the member's ability to obtain care?",
+        "field_ui_control": "radio",
+        "field_original_options": ["Yes", "No"],
+        "field_selected_value": ["Yes"]
+      },
+      {
+        "field_display_order": 23,
+        "field_name": "1024",
+        "field_ui_label": "Select all that apply",
+        "field_dependency": "1023",
+        "field_visible_only": ["Yes"],
+        "field_ui_control": "radio-multiple",
+        "field_original_options": ["Food", "Housing", "Transportation", "Other"],
+        "field_selected_value": ["Food"]
+      },
+      {
+        "field_display_order": 24,
+        "field_name": "1025",
+        "field_ui_label": "Is English the main language spoken at home?",
+        "field_ui_control": "radio",
+        "field_original_options": ["Yes", "No"],
+        "field_selected_value": ["Yes"]
+      },
+      {
+        "field_display_order": 25,
+        "field_name": "1027",
+        "field_ui_label": "I consent to receive text/email messages from LIBERTY Dental Plan to help manage my oral health.",
+        "field_ui_control": "radio",
+        "field_original_options": ["Yes", "No"],
+        "field_selected_value": ["Yes"]
+      },
+      {
+        "field_display_order": 26,
+        "field_name": "1028",
+        "field_ui_label": "Receive text/email messages from LIBERTY Dental Plan to help manage my oral health.",
+        "field_ui_control": "array",
+        "field_dependency": "1027",
+        "field_visible_only": ["Yes"],
+        "field_ui_label_inputs": [
+          {
+            "name": "cellphone",
+            "label": "Cell Phone",
+            "length": 14,
+            "type": "text"
+          },
+          {
+            "name": "email",
+            "label": "Email",
+            "type": "text"
+          }
+        ],
+        "field_selected_value": [
+          {
+            "cellphone": "1234567890",
+            "email": "test@gmail.com"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "section_name": "Assessment Completion",
+    "fields": [
+      {
+        "field_display_order": 27,
+        "field_name": "1029",
+        "field_ui_label": "Did member decline completing OHRA Assessment?",
+        "field_ui_control": "radio",
+        "field_original_options": ["Yes", "No"],
+        "field_selected_value": ["No"]
+      },
+      {
+        "field_display_order": 28,
+        "field_name": "1030",
+        "field_ui_label": "Welcomed and Offered Appt",
+        "field_ui_control": "radio",
+        "field_original_options": ["Welcome and Declined Appt", "Welcome and Made Appt", "Declined All Assistance"],
+        "field_selected_value": ["Welcome and Declined Appt"]
+      },
+      {
+        "field_display_order": 29,
+        "field_name": "1031",
+        "field_ui_label": "Transportation Info Offered",
+        "field_ui_control": "radio",
+        "field_original_options": ["Completed", "Incomplete", "None on File", "Declined"],
+        "field_selected_value": ["Completed"]
+      },
+      {
+        "field_display_order": 30,
+        "field_name": "1032",
+        "field_ui_label": "Medical Records",
+        "field_ui_control": "radio-multiple",
+        "field_original_options": ["Checked"],
+        "field_selected_value": ["Checked"]
+      },
+      {
+        "field_display_order": 31,
+        "field_name": "1033",
+        "field_ui_label": "Dental Records",
+        "field_ui_control": "radio-multiple",
+        "field_original_options": ["Checked"],
+        "field_selected_value": ["Checked"]
+      },
+      {
+        "field_display_order": 32,
+        "field_name": "1035",
+        "field_ui_label": "Interpreter Vendor",
+        "field_ui_control": "text",
+        "field_selected_value": ["tesy"]
+      },
+      {
+        "field_display_order": 33,
+        "field_name": "1034",
+        "field_ui_label": "Interpreter Language",
+        "field_ui_control": "dropdown",
+        "field_selected_value": [
+          {
+            "value": "English",
+            "label": "English"
+          }
+        ]
+      },
+      {
+        "field_display_order": 34,
+        "field_name": "1036",
+        "field_ui_label": "NOTES",
+        "field_ui_control": "note",
+        "field_selected_value": [
+            {
+                "name": "CaseManager Twoo",
+                "role": "Case Manager",
+                "createdAt": "04/04/2026 5:36:38 PM",
+                "note_content": "sasas",
+                "mark_up_note_content": "<p>sasas</p>"
+            }
+        ],
+        "required": true
+      }
+    ]
+  }
+]
