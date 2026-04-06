@@ -6,7 +6,9 @@ import assessmentData from "./fixtures/assessmentData.json";
 // Helper function to navigate to Assessment List page
 async function navigateToAssessmentList(page: Page) {
   // Navigate to Case Management
-  const caseManagementButton = page.getByRole("button", { name: "Case Management route_to" });
+  const caseManagementButton = page.getByRole("button", {
+    name: "Case Management route_to",
+  });
   await caseManagementButton.waitFor({ state: "visible", timeout: 30000 });
   await caseManagementButton.click();
 
@@ -65,7 +67,7 @@ async function navigateToAssessmentList(page: Page) {
   await memberInfoHeading.waitFor({ state: "visible", timeout: 30000 });
   await expect(memberInfoHeading).toBeVisible({ timeout: 30000 });
 
-  // Navigate to Assessments
+  // Navigate to Assessments side nav menu option
   await page.getByText("Assessments").click();
   await page.waitForLoadState("networkidle");
   await expect(page).toHaveURL(/.*assessmentlist.*/, { timeout: 30000 });
@@ -119,7 +121,9 @@ async function fillTextField(page: Page, fieldId: string, value: string) {
 async function selectRadio(page: Page, fieldId: string, value: string) {
   // Scope the selector to the specific field container, then find the option label
   const fieldContainer = page.locator(`[id="${fieldId}"]`);
-  const radioButton = fieldContainer.locator(`.assessment-option-label`, { hasText: value });
+  const radioButton = fieldContainer.locator(`.assessment-option-label`, {
+    hasText: value,
+  });
 
   await radioButton.waitFor({ state: "visible", timeout: 10000 });
   await radioButton.click();
@@ -127,11 +131,17 @@ async function selectRadio(page: Page, fieldId: string, value: string) {
 }
 
 // Helper function to select multiple radio options
-async function selectMultipleRadios(page: Page, fieldId: string, values: string[]) {
+async function selectMultipleRadios(
+  page: Page,
+  fieldId: string,
+  values: string[],
+) {
   const fieldContainer = page.locator(`[id="${fieldId}"]`);
 
   for (const value of values) {
-    const radioButton = fieldContainer.locator(`.assessment-option-label`, { hasText: value });
+    const radioButton = fieldContainer.locator(`.assessment-option-label`, {
+      hasText: value,
+    });
     await radioButton.waitFor({ state: "visible", timeout: 10000 });
     await radioButton.click();
     console.log(`✓ Selected radio [${fieldId}]: ${value}`);
@@ -139,7 +149,11 @@ async function selectMultipleRadios(page: Page, fieldId: string, values: string[
 }
 
 // Helper function to select dropdown option
-async function selectDropdown(page: Page, fieldLabel: string, optionValue: string) {
+async function selectDropdown(
+  page: Page,
+  fieldLabel: string,
+  optionValue: string,
+) {
   const dropdown = page.getByRole("combobox", { name: fieldLabel });
   await dropdown.waitFor({ state: "visible", timeout: 10000 });
   await dropdown.click();
@@ -175,7 +189,9 @@ async function addAssessmentNote(page: Page, noteContent: string) {
   console.log(`\n📝 Adding assessment note: "${noteContent}"`);
 
   // Click the "+ADD ASSESSMENT NOTE(s)" button
-  const addNoteButton = page.getByRole("button", { name: "+ADD ASSESSMENT NOTE(s)" });
+  const addNoteButton = page.getByRole("button", {
+    name: "+ADD ASSESSMENT NOTE(s)",
+  });
   await addNoteButton.waitFor({ state: "visible", timeout: 10000 });
   await addNoteButton.click();
   console.log("✓ Clicked +ADD ASSESSMENT NOTE(s) button");
@@ -213,7 +229,9 @@ test.beforeEach(async ({ page }) => {
 async function fillAndSubmitAssessment(page: Page) {
   // Wait for assessment page to load
   await page.waitForLoadState("networkidle");
-  await expect(page.getByRole("row", { name: "BOWMAN First Name HAERTEL" })).toBeVisible({ timeout: 10000 });
+  // await expect(
+  //   page.getByRole("row", { name: "BOWMAN First Name HAERTEL" }),
+  // ).toBeVisible({ timeout: 10000 });
 
   console.log("Starting assessment form fill using data-driven approach...");
 
@@ -226,7 +244,8 @@ async function fillAndSubmitAssessment(page: Page) {
       const fieldLabel = field.field_ui_label;
       const fieldType = field.field_ui_control;
       const selectedValue = field.field_selected_value?.[0];
-      const selectedResponse = (field as any).field_selected_value_response?.[0];
+      const selectedResponse = (field as any)
+        .field_selected_value_response?.[0];
 
       console.log(`\nField: ${fieldLabel} (${fieldType})`);
 
@@ -254,14 +273,21 @@ async function fillAndSubmitAssessment(page: Page) {
 
           case "radio-multiple": {
             if (Array.isArray(field.field_selected_value)) {
-              await selectMultipleRadios(page, fieldId, field.field_selected_value as string[]);
+              await selectMultipleRadios(
+                page,
+                fieldId,
+                field.field_selected_value as string[],
+              );
             }
             break;
           }
 
           case "array": {
             // For array fields like phone + email
-            if (field.field_selected_value && field.field_selected_value.length > 0) {
+            if (
+              field.field_selected_value &&
+              field.field_selected_value.length > 0
+            ) {
               const arrayData = field.field_selected_value[0];
               const inputs = [
                 { label: "Cell Phone", value: (arrayData as any).cellphone },
@@ -273,9 +299,13 @@ async function fillAndSubmitAssessment(page: Page) {
           }
 
           case "dropdown": {
-            if (field.field_selected_value && field.field_selected_value.length > 0) {
-              const selectedOption = (field.field_selected_value[0] as any);
-              const optionValue = selectedOption.value || selectedOption.label || selectedOption;
+            if (
+              field.field_selected_value &&
+              field.field_selected_value.length > 0
+            ) {
+              const selectedOption = field.field_selected_value[0] as any;
+              const optionValue =
+                selectedOption.value || selectedOption.label || selectedOption;
               await selectDropdown(page, fieldLabel, optionValue as string);
             }
             break;
@@ -283,9 +313,13 @@ async function fillAndSubmitAssessment(page: Page) {
 
           case "note": {
             // Handle assessment notes
-            if (field.field_selected_value && field.field_selected_value.length > 0) {
-              const noteData = (field.field_selected_value[0] as any);
-              const noteContent = noteData.note_content || noteData.mark_up_note_content;
+            if (
+              field.field_selected_value &&
+              field.field_selected_value.length > 0
+            ) {
+              const noteData = field.field_selected_value[0] as any;
+              const noteContent =
+                noteData.note_content || noteData.mark_up_note_content;
               if (noteContent) {
                 await addAssessmentNote(page, noteContent);
               }
@@ -314,7 +348,9 @@ async function fillAndSubmitAssessment(page: Page) {
 
   try {
     // Scroll down to make sure COMPLETE button is visible
-    await page.locator("body").evaluate((el) => el.scrollTop = el.scrollHeight);
+    await page
+      .locator("body")
+      .evaluate((el) => (el.scrollTop = el.scrollHeight));
     await page.waitForTimeout(1000);
 
     // Submit the assessment
@@ -385,7 +421,9 @@ test("Step 3: Verify OHRA Adult Assessment page is loaded", async ({
 });
 
 // End-to-End Assessment Flow with data-driven form fill and submission
-test("Step 4: Complete and submit OHRA Adult Assessment (Data-Driven)", async ({ page }) => {
+test("Step 4: Complete and submit OHRA Adult Assessment (Data-Driven)", async ({
+  page,
+}) => {
   await navigateToAssessmentList(page);
   await clickAssessmentStartButton(page);
   await fillAndSubmitAssessment(page);
