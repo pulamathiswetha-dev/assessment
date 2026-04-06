@@ -1,0 +1,235 @@
+{
+  "cookies": [
+    {
+      "name": "__Host-next-auth.csrf-token",
+      "value": "e568a1160a974072e4cc35992027ee9174a423d15487982040a5529b4d29abb8%7C2127317a3d8ab140960d434a0419b4bf1d46592b0e02df95045a50b14bf44e7a",
+      "domain": "dentalpayer.health3d.ai",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "__Secure-next-auth.callback-url",
+      "value": "https%3A%2F%2Fdentalpayer.health3d.ai%2F",
+      "domain": "dentalpayer.health3d.ai",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "esctx-a1fHsFY9mw",
+      "value": "AQABCQEAAACvnsHKEvvRQb3Bz3Qc7wnaRXZvU3RzQXJ0aWZhY3RzDQAAAAAAI0Zf1j9M0bDaOnMzT8WgmVjaewk5BaGJkds6aGB8t5mSIGVYoSnvgia3zJXsQ-J24I5S1PtQ33CUnGBCTpV4NfmB63j32LMFeuC8D7RRLnm7QatniBcVs3SsB93HHbLI6HHaQWvi_2aH4US2ux4qsyAA",
+      "domain": ".login.microsoftonline.com",
+      "path": "/",
+      "expires": 1775474915.277596,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "x-ms-gateway-slice",
+      "value": "estsfd",
+      "domain": "login.microsoftonline.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "stsservicecookie",
+      "value": "estsfd",
+      "domain": "login.microsoftonline.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "AADSSO",
+      "value": "NA|NoExtension",
+      "domain": ".login.microsoftonline.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "SSOCOOKIEPULLED",
+      "value": "1",
+      "domain": "login.microsoftonline.com",
+      "path": "/",
+      "expires": 1775473474,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "esctx-ar7YorzaByw",
+      "value": "AQABCQEAAACvnsHKEvvRQb3Bz3Qc7wnaRXZvU3RzQXJ0aWZhY3RzDQAAAAAAFNGLyT0wB3Nnw94XqtukJk6_NYzTH4Y9uLSaaHbNjKELimyQHY8jEj3Eznozng2oULi2IbKJPNxYOci3dSsxqn3gHMdKCjBPkYQxzBAtMtjgCl0kg3A2-TVbhe7eyUYF_AfNOzM5p-WlFEyeTldEVCAA",
+      "domain": ".login.microsoftonline.com",
+      "path": "/",
+      "expires": 1775474915.029615,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "brcap",
+      "value": "0",
+      "domain": ".login.microsoftonline.com",
+      "path": "/",
+      "expires": 1809169415,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "wlidperf",
+      "value": "FR=L&ST=1775473417333",
+      "domain": ".microsoftonline.com",
+      "path": "/",
+      "expires": 1809169417,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "ESTSAUTHLIGHT",
+      "value": "+003dfb4a-6cc7-9c28-2e9f-777779ea57bd",
+      "domain": "login.microsoftonline.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "esctx",
+      "value": "PAQABBwEAAACvnsHKEvvRQb3Bz3Qc7wnaRXZvU3RzQXJ0aWZhY3RzDQAAAAAAPAlrOwF_9pV9Jl66XQOfc-bBkrvGEGQR_ss38vfRIloZ8waCrhPSPKAPKeQ7x8M6-dvNLy0nphaoBkqhaGCt8569N1xPk1zmakjoJUl6DADnEymRLSH7e_rhcobH5g2t959cyrik-n72jxSa62oqC7z8enu9Q0r03X2qzSHlQmAgAA",
+      "domain": ".login.microsoftonline.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "esctx-lk7TYmMJRiE",
+      "value": "AQABCQEAAACvnsHKEvvRQb3Bz3Qc7wnaRXZvU3RzQXJ0aWZhY3RzDQAAAAAApNXEcKf-XZ38uwFKjIOQIDf8ozxr0HIL-7XD3HNRhtGml6gp6Ux3C9yQ2F_XAgYw2I9g-fiCiY3BaB0x2TMWEACg8C3Jh0kBrPlD0Fo26LJnJn8kmOxBRCzsvU_Y98Qpcf08bQjrLOEqxPeiwOJ1nyAA",
+      "domain": ".login.microsoftonline.com",
+      "path": "/",
+      "expires": 1775474919.248355,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "uaid",
+      "value": "4fb368d894524ed2850d4176b81aa932",
+      "domain": ".login.live.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "MSPRequ",
+      "value": "id=N&lt=1775473418&co=2",
+      "domain": ".login.live.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "ESTSAUTHPERSISTENT",
+      "value": "1.AcgA44LNVpIMnU-XtVOGU3zsYQNFat-VbYJDkhyt0LXJs9MAAADIAA.AgABFwQAAACvnsHKEvvRQb3Bz3Qc7wnaAwDs_wUA9P9Fdm9TdHNBcnRpZmFjdHMQAAAAAAALYEu_WU4Ugz30Q-fu9olIu6KuRlY1gaCkYPYc5vBmoDeHzuDGCtTTPTMsbyH-JajjglYv0fMFrlNMk1QgP0DFdpKRjxplBnmhLjMQDSpZBxt9yNH1WmUUgXX_7GsatFWhh733OTFuEIE7kIHYsVmq6NbGurTyjrl_ZwM5A2p5-3RfQgHZauzCMaS54N2qsg0Df7ea94B5pxJyUnaKvwtPvWNyPnCzeQ0wALEOyGgZp_wXh1F2vD0rLKe-wGGjw2CE6o04Eh04-Q0mPy7-O98DKdR0-x7M43ZEsGhS9T0IMWJhwzgGHtaEdFwMGG14-fjCcNuEWazGTGUX94fzxg1d62S6tpBB7l1iDs4HhMXsssw5T4iExLXhq3aRsvCUJo_gusJfSBthRuS18QVmfOawoX8VKgkywmEUXR932qbLA1XngL6uZG9vb2hV-WlyYwP1MmR-22UCmdLKYmLf2rCCiTU2hr8ely8rBRu3rOcTgiUbc8nLRhUZctSTjF_dENJvjmo_Dk4JwXRsdWZl9BmGO0u1GRSDKCA9UDXTciJXdlt4uEYT5YW-qYKRimgS0mlX36mERTGfQICFBglLVgLoKjd-u4A_k_-wBKmU3jIa_6T_C1SeyGFBywOfzIHxQXirGQ",
+      "domain": ".login.microsoftonline.com",
+      "path": "/",
+      "expires": 1783249420.273974,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "ESTSAUTH",
+      "value": "1.AcgA44LNVpIMnU-XtVOGU3zsYQNFat-VbYJDkhyt0LXJs9MAAADIAA.",
+      "domain": ".login.microsoftonline.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "buid",
+      "value": "1.AcgA44LNVpIMnU-XtVOGU3zsYQNFat-VbYJDkhyt0LXJs9MAAADIAA.AQABGgEAAACvnsHKEvvRQb3Bz3Qc7wnaRXZvU3RzQXJ0aWZhY3RzAwAAAAAAQCggVuhY8OVKkB-ILcofn8JU1PaEp0h78gXDCaiDCotmRptNP8JZo2X4uxxcB1QTWOK3zmWaLgN9BlNp-lkQeCTdIyU23496Q9NwR3IEwKR4trfNjn1vboJLncmQGLRMjUnrrr8H9nSKGamslDemymojDGIJJOMU_4Kq0SBv39sgAA",
+      "domain": "login.microsoftonline.com",
+      "path": "/",
+      "expires": 1778065420.274147,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "CCState",
+      "value": "RWhJS0VOTVlERzdscEw5RnZVNGY1dkgrcGNNPQ==",
+      "domain": ".login.microsoftonline.com",
+      "path": "/",
+      "expires": 1776337420.274202,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "SignInStateCookie",
+      "value": "CAgABFgIAAACvnsHKEvvRQb3Bz3Qc7wnaAwDs_wUA9P9Fdm9TdHNBcnRpZmFjdHMGAAAAAAA2sUOLfm_7q4qsz7Zob-I_rDyj-OeLuxm1ivC6y8jcq0w-LP6hhCu_s2_-eZG0EN0-ZCPtL8_r4vHBrlIwewWuPIxEljxVrQu5ZxJt9hnfPGBbl2l_2NATAaSE5K2fwy9UeSAi5mWJHg-M9NmEAYFIRW4uldRX9_sohXh6bUiF3NnXWAUmx4ao9Utc-FU6tJXkt8Qe8N4YsR3VPeUlp4tiYwYEYK2Hzg0-RVAy7flHLkO8jYUVwCIjJt0kxYDISqivYlpOeSc",
+      "domain": ".login.microsoftonline.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "fpc",
+      "value": "AhSpEo7xatpGuDlYidKXw2J8g43-AQAAAAaKZeEOAAAAXoTzfQEAAAAJimXhDgAAAM2moaIBAAAACopl4Q4AAAA",
+      "domain": "login.microsoftonline.com",
+      "path": "/",
+      "expires": 1778065420.274268,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "__Secure-next-auth.session-token",
+      "value": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..p64Xb4qSiMSH-FnC.4xglQWm_HXWpgJ4Ex7y2R3pcvFlD6xHxxBqCQE3odhVLELUOEiZMKa5tGQQNveyCmCYVUFsO_4RCC9pJxKUCe4c_fb16URQSkJc8h_j-Id4micTws7cgoAv2Vnzm8hxbNVLt0GAZ8lNLCUlQi3bnwA9FQIJtDxlUb4XJvCDtNnW0pRgh8-psQhFOkDm73n3dBoZcstGwI1P7ppawvXOTfiO_P4kAph3brcVNHh8pYb9hMbhEMQprXUNd4reXrJXgKWGLgxsA9qK_MfTC-ojodHRL4II6-zk-u8Ibj9CzxleoHZxCJQ0F_7lR3mYuBQPILBzkkIFtWEleTA4TM4-J-3XaBGBQZC1RfKAJ4OXxmF0TIqA-JA3mtH99m3qGi3GGoRebfuz1rXugMrwUWuHjiMN1hFFpIK1K91K2h6jRMyq42WFwNpz1GSWhrpntOlWvxOWJ3-GekBbkzzC4OVTH0yutaFLeXHsttivUkK-2qR41QA989Rqtc6Ag5pERQaDa-K2q3p4kzju1AYiyzbpQvJSd-UYIO9RjPmqRM5gma21SR03lM7T5lWKmiX_XQnz9HP4ubBI_yRDmpMUrnvSyTE5XoXRG0pbqEq_ucPIhdlNXMQ3UTcd5rn3W_-G9kuXti3fq1jNpY-8cwYbgsVUDwV8hY5e09xSB8VGD5M4-ouOIbzM27gqMDxmbXQk8W-41fB6w-MXvdDcv9_Mt1ZwIzThCIu-XvmesVnwFwlYJKACRv9b7mIGmKc8jlQfJSXmFQjiuv16OnzK-8hs9zAp9xIQJgMVibKvvpynYaMakJbwi4Pp4rS_iOOMeh7X5HlUqGKgmmr7iwZlUZedZEGSwQ1RVYPPObJRRh8ME3w8OjnkqCGvRQzTXSbTaO-5dSO3Osjj3o6nMdhxu1A-cHg0xV9R-4dB3b5IVm2i0TqW604wKEC0x5LbsRW2SUJH-i4PTJLa2ajczPLAHDS4vGJVNEq9gstIm-vQw8NEOWHbhUGk5I9lpsYbYZT-TXTQwPymXxoyvk-y-oaKNvZ3B34XJ6CWd2UNV0K2dGEw1NIOs0I4nqLY_LxDzWWydHJO4nbGQkVlSNP12Qs6zHshaxzyx4Fwxk8em5znwI0K7v0tlyMNw0ar7Fvgxpcvq22BgRObCm5bwTLW3pP_4R8q8LH_ZtszGJZBStJ324B9plIRvLJfAGZhYp_HWq1YVQDs4dD_goN6DTltzkAj4T3a22p3nMyjNmpUmtbrwEM3f2WoBrA3mIH9RfGpcrjXPsZL20rVPrzQE-NPdE1-Ns_udH-bUxXvDx9ngBY3lGsq7dFuGSrlJMF7IudMnVaQlcTs443txCQ3Rq2ESW6A1i8kzOMg4YXa6bM13jYNLt5CbnaYkVzqie0XYasL8jR9u7yVXJOD2e9eezVZndu9-ha1baaP8hjuI-2plqQnBf5YZLW_plg6nppQnILq2aVDDnxSPGnxEq3v6Pr5T6j69OL2Uq3USqyDafTgTe615XUCtoOnh0JjbPwYADhrvUmyzFKPUz1Je0aA1-oxGhly2WNUI9oaaueJZUpKpJo8ZLJ9WAGzzRKe-eN5DdatO00mPN-aKTGyLmeuN76aEpMZr5YxXp2vxDEyeu9mFCjps5uAIjSPlu1egJ4w4UCPFS6CcxScRID_vRhLgqOuV4VtZfT2dvH1I5kg96o1epE0TL5TmLG5GUo0v_wLeeaS7qqLafHAMKOtsimSwk4pwBrWNIQR6GzA6ZUglQ2hNlhlWcZX6EUmvL2joTiouN213BeblCg2F4KNm4ErXOsz3R-uBrqCUydWErvKOfIt2-Ok4egMySCXDa0e8pJOgYTcse_tDqbUW96V4sWiozZn1HqhCAkss7DldRv7Q2pIgAsV9VaWxTQkt-yKf1xSgwjJgMmtrYiQU-6ayCsxlMBak_QDrY_tpKKN2ESxpCfXm_KFaAro0gWHiPNQ9IieVG5Q-AbiRNPLK9-A4Ieip0Q4XFZjaiRIH_1M6RDdHbydYLlj74MRGdZO5WaskAe-M8fjyB22Ubnw5CSYHYgKoCA.F_K-Ou2LTHXDSH0cFfBv-Q",
+      "domain": "dentalpayer.health3d.ai",
+      "path": "/",
+      "expires": 1778065422.947394,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "Lax"
+    }
+  ],
+  "origins": [
+    {
+      "origin": "https://dentalpayer.health3d.ai",
+      "localStorage": [
+        {
+          "name": "nextauth.message",
+          "value": "{\"event\":\"session\",\"data\":{\"trigger\":\"getSession\"},\"timestamp\":1775473422}"
+        }
+      ]
+    }
+  ]
+}
