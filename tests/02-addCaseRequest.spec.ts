@@ -9,11 +9,11 @@ test.describe("Add Case Request", () => {
 
   test.beforeEach(async ({ page }) => {
     // Navigate to app first (auth state will be automatically loaded)
-    await page.goto(BASE_URL);
+    // await page.goto(BASE_URL);
     await navigateToAddCaseRequest(page);
   });
 
-  test("Navigate to Add Case Request page", async ({ page }) => {
+  test("Search for member by Member Number input field in page", async ({ page }) => {
     const memberNumberInput = page.getByRole("textbox", {
       name: "Member Number",
     });

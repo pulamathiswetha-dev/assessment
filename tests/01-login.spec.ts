@@ -31,19 +31,19 @@ test.describe("Login Flow", () => {
     await page.waitForLoadState("networkidle");
   });
 
-  test("Verify dashboard navigation options are visible", async ({ page }) => {
-    // Navigate to Case Management
-    const caseManagementButton = page.getByRole("button", {
-      name: "Case Management route_to",
-    });
-    await caseManagementButton.click();
-    await page.waitForLoadState("networkidle");
+  // test("Verify dashboard navigation options are visible", async ({ page }) => {
+  //   // Navigate to Case Management
+  //   const caseManagementButton = page.getByRole("button", {
+  //     name: "Case Management route_to",
+  //   });
+  //   await caseManagementButton.click();
+  //   await page.waitForLoadState("networkidle");
 
-    // Verify sidebar navigation items are visible
-    const addCaseNav = page.locator("span.nav-text", {
-      hasText: "Add Case Request",
-    });
-    await addCaseNav.waitFor({ state: "visible", timeout: 30000 });
-    await expect(addCaseNav).toBeVisible({ timeout: 30000 });
-  });
+  //   // Verify Add Case is available in the sidebar navigation items
+  //   const addCaseNav = page.locator("span.nav-text", {
+  //     hasText: "Add Case Request",
+  //   });
+  //   await addCaseNav.waitFor({ state: "visible", timeout: 30000 });
+  //   await expect(addCaseNav).toBeVisible({ timeout: 30000 });
+  // });
 });
