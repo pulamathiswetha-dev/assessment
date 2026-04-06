@@ -2,18 +2,16 @@ import { test, expect } from "@playwright/test";
 import { getCaseIdFromFile } from "./helpers/fileHelper";
 import { BASE_URL } from "./helpers/config";
 
-test.beforeEach(async ({ page }) => {
+test("Complete full member list search and navigation flow", async ({ page }) => {
   // Navigate to app first (auth state will be automatically loaded)
   await page.goto(BASE_URL);
-});
 
-test("Navigate to Member List from side navigation", async ({ page }) => {
-
-  // Navigate to Case Management
+  // STEP 1: Navigate to Member List from side navigation
   const caseManagementButton = page.getByRole("button", { name: "Case Management route_to" });
   await caseManagementButton.waitFor({ state: "visible", timeout: 30000 });
   await caseManagementButton.click();
   await page.waitForLoadState("networkidle");
+  console.log("✓ Navigated to Case Management");
 
   // Click on Member List in the side navigation
   const memberListNav = page.locator("span.nav-text", {
@@ -33,24 +31,9 @@ test("Navigate to Member List from side navigation", async ({ page }) => {
     .getByRole("heading", { name: "Member List" });
   await pageHeading.waitFor({ state: "visible", timeout: 30000 });
   await expect(pageHeading).toBeVisible({ timeout: 30000 });
-});
+  console.log("✓ Member List page loaded");
 
-test("Search for case by Case ID in Member List", async ({ page }) => {
-  // Navigate to Case Management
-  const caseManagementButton = page.getByRole("button", { name: "Case Management route_to" });
-  await caseManagementButton.waitFor({ state: "visible", timeout: 30000 });
-  await caseManagementButton.click();
-  await page.waitForLoadState("networkidle");
-
-  // Navigate to Member List
-  const memberListNav = page.locator("span.nav-text", {
-    hasText: "Member List",
-  });
-  await memberListNav.waitFor({ state: "visible", timeout: 30000 });
-  await memberListNav.click();
-
-  // Wait for the member list page to load
-  await page.waitForLoadState("networkidle");
+  // STEP 2: Search for case by Case ID in Member List
   await page.waitForSelector("table", { timeout: 30000 });
 
   // Read caseId from file
@@ -84,46 +67,9 @@ test("Search for case by Case ID in Member List", async ({ page }) => {
     .catch(() => false);
 
   expect(noDataMessage).toBeFalsy();
-});
+  console.log("✓ Case found in Member List");
 
-test("Click on Member name and navigate to Member Info page", async ({
-  page,
-}) => {
-  // Navigate to Case Management
-  const caseManagementButton = page.getByRole("button", { name: "Case Management route_to" });
-  await caseManagementButton.waitFor({ state: "visible", timeout: 30000 });
-  await caseManagementButton.click();
-  await page.waitForLoadState("networkidle");
-
-  // Navigate to Member List
-  const memberListNav = page.locator("span.nav-text", {
-    hasText: "Member List",
-  });
-  await memberListNav.waitFor({ state: "visible", timeout: 30000 });
-  await memberListNav.click();
-
-  // Wait for the member list page to load
-  await page.waitForLoadState("networkidle");
-  await page.waitForSelector("table", { timeout: 30000 });
-
-  // Read caseId from file
-  const caseId = getCaseIdFromFile();
-  console.log(`Searching for case ID: ${caseId}`);
-
-  // Find and fill the Case ID search field
-  const caseIdSearchField = page.getByRole("textbox", { name: "Case ID" });
-  await caseIdSearchField.waitFor({ state: "visible", timeout: 30000 });
-  await caseIdSearchField.click();
-  await caseIdSearchField.clear();
-  await caseIdSearchField.fill(caseId);
-
-  // Press Enter to search
-  await caseIdSearchField.press("Enter");
-
-  // Wait for the table to filter and show results
-  await page.waitForTimeout(2000);
-  await page.waitForLoadState("networkidle");
-
+  // STEP 3: Click on Member name and navigate to Member Info page
   // Find and click on the Member name in the table
   // The member name is in the first row of the table
   const firstTableRow = page.locator("table tbody tr").first();
@@ -149,6 +95,8 @@ test("Click on Member name and navigate to Member Info page", async ({
 
   // Verify the page URL contains caserequest (the member info page URL pattern)
   await expect(page).toHaveURL(/.*\/caserequest\/.*/, { timeout: 30000 });
+
+  console.log("✓ Navigated to Member Info page successfully");
 
   // Wait for some time to view the member info screen
   await page.waitForTimeout(3000);

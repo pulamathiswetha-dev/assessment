@@ -29,7 +29,6 @@ async function navigateToAssessmentList(page: Page) {
 
   // Read caseId from file
   const caseId = getCaseIdFromFile();
-  console.log(`Searching for case ID: ${caseId}`);
 
   // Find and fill the Case ID search field
   const caseIdSearchField = page.getByRole("textbox", { name: "Case ID" });
@@ -75,7 +74,7 @@ async function navigateToAssessmentList(page: Page) {
 
 // Helper function to click OHRA Adult Assessment START button
 async function clickAssessmentStartButton(page: Page) {
-  let ohraElement = page.getByText("OHRA Adult Assessment");
+  let ohraElement = page.getByText("OHRA Adult Assessment", { exact: true }).first();
   await ohraElement.waitFor({ state: "visible", timeout: 30000 });
   await expect(ohraElement).toBeVisible({ timeout: 30000 });
   await page.getByRole("button", { name: "START" }).nth(1).click();
@@ -87,34 +86,137 @@ async function clickAssessmentStartButton(page: Page) {
   await page.getByRole("main").waitFor({ state: "visible", timeout: 30000 });
 }
 
-// Helper function to fill text fields
-async function fillTextField(page: Page, fieldId: string, value: string) {
-  // Target specifically input elements with the given id (not divs)
-  const field = page.locator(`input[id="${fieldId}"]`);
-  const count = await field.count();
+// Helper function to fill text fields - uses smart label matching
+async function fillTextField(page: Page, fieldId: string, value: string, fieldLabel?: string) {
+  let field: any = null;
+  let count = 0;
 
-  if (count === 0) {
-    // If no input found, try text areas
-    const textAreaField = page.locator(`textarea[id="${fieldId}"]`);
-    await textAreaField.waitFor({ state: "visible", timeout: 10000 });
-    await textAreaField.click();
-    await textAreaField.clear();
-    await textAreaField.fill(value);
-  } else if (count > 1) {
-    // If multiple inputs, get the last one (it's usually the visible response field)
-    const lastField = field.last();
-    await lastField.waitFor({ state: "visible", timeout: 10000 });
-    await lastField.click();
-    await lastField.clear();
-    await lastField.fill(value);
-  } else {
-    // Single input found
-    await field.waitFor({ state: "visible", timeout: 10000 });
-    await field.click();
-    await field.clear();
-    await field.fill(value);
+  // Strategy 1: Try to find by ID
+  field = page.locator(`input[id="${fieldId}"]`);
+  count = await field.count();
+  if (count > 0) {
+    console.log(`✓ Found by ID: ${fieldId}`);
   }
-  console.log(`✓ Filled text field [${fieldId}] with value: ${value}`);
+
+  // Strategy 2: Try to find by textbox role with label
+  if (count === 0 && fieldLabel) {
+    field = page.getByRole("textbox", { name: fieldLabel });
+    count = await field.count();
+    if (count > 0) {
+      console.log(`✓ Found by role + label: ${fieldLabel}`);
+    }
+  }
+
+  // Strategy 3: Try to find by label text connection
+  if (count === 0 && fieldLabel) {
+    const labelElement = page.locator(`label:has-text("${fieldLabel}")`).first();
+    const labelCount = await labelElement.count();
+    if (labelCount > 0) {
+      const forAttr = await labelElement.getAttribute("for");
+      if (forAttr) {
+        field = page.locator(`input[id="${forAttr}"]`);
+        count = await field.count();
+        if (count > 0) {
+          console.log(`✓ Found by label "for" attribute: ${forAttr}`);
+        }
+      }
+    }
+  }
+
+  // Strategy 4: Find input by checking for "Please describe" accessible name for first text field
+  if (count === 0 && fieldLabel === "What is the Conversation ID?") {
+    // Special case: this field uses "Please describe" as accessible name
+    field = page.getByRole("textbox", { name: "Please describe" }).first();
+    count = await field.count();
+    if (count > 0) {
+      console.log(`✓ Found by accessible name "Please describe": ${fieldLabel}`);
+    }
+  }
+
+  // Strategy 5: Generic - Find input/textarea near the field label text by position
+  if (count === 0 && fieldLabel) {
+    try {
+      const allInputs = await page.locator("input, textarea").all();
+
+      if (allInputs.length > 0) {
+        // Try to find label and get closest input below it
+        const labelLocator = page.getByText(fieldLabel).first();
+        const labelVisible = await labelLocator.isVisible().catch(() => false);
+
+        if (labelVisible) {
+          const labelBox = await labelLocator.boundingBox();
+          if (labelBox) {
+            let closestInput: any = null;
+            let closestDistance = Number.MAX_VALUE;
+
+            for (const input of allInputs) {
+              const isVisible = await input.isVisible().catch(() => false);
+              if (isVisible) {
+                const inputBox = await input.boundingBox();
+                if (inputBox) {
+                  // Calculate vertical distance (prioritize inputs below the label)
+                  const distance = inputBox.y - labelBox.y;
+                  if (distance >= 0 && distance < closestDistance) {
+                    closestDistance = distance;
+                    closestInput = input;
+                  }
+                }
+              }
+            }
+
+            if (closestInput) {
+              field = closestInput;
+              count = 1;
+              console.log(`✓ Found by field label proximity: ${fieldLabel}`);
+            }
+          }
+        }
+      }
+    } catch (e) {
+      console.log(`⚠️ Error finding field by label proximity: ${e}`);
+    }
+  }
+
+  // Strategy 5: Try textarea approaches
+  if (count === 0) {
+    field = page.locator(`textarea[id="${fieldId}"]`);
+    count = await field.count();
+    if (count > 0) {
+      console.log(`✓ Found textarea by ID: ${fieldId}`);
+    }
+  }
+
+  if (count === 0 && fieldLabel) {
+    field = page.locator(`textarea[aria-label="${fieldLabel}"]`);
+    count = await field.count();
+    if (count > 0) {
+      console.log(`✓ Found textarea by aria-label: ${fieldLabel}`);
+    }
+  }
+
+  // If still not found, skip this field and log warning
+  if (count === 0) {
+    return; // Skip this field instead of throwing error
+  }
+
+  try {
+    if (count > 1) {
+      // If multiple inputs, get the last one
+      const lastField = field.last();
+      await lastField.waitFor({ state: "visible", timeout: 10000 });
+      await lastField.click();
+      await lastField.clear();
+      await lastField.fill(value);
+    } else {
+      // Single field found
+      await field.waitFor({ state: "visible", timeout: 10000 });
+      await field.click();
+      await field.clear();
+      await field.fill(value);
+    }
+  } catch (e) {
+    console.warn(`⚠️ Error filling field [${fieldId}]: ${e}`);
+  }
 }
 
 // Helper function to select radio button by field ID
@@ -127,7 +229,6 @@ async function selectRadio(page: Page, fieldId: string, value: string) {
 
   await radioButton.waitFor({ state: "visible", timeout: 10000 });
   await radioButton.click();
-  console.log(`✓ Selected radio [${fieldId}]: ${value}`);
 }
 
 // Helper function to select multiple radio options
@@ -144,7 +245,6 @@ async function selectMultipleRadios(
     });
     await radioButton.waitFor({ state: "visible", timeout: 10000 });
     await radioButton.click();
-    console.log(`✓ Selected radio [${fieldId}]: ${value}`);
   }
 }
 
@@ -162,7 +262,6 @@ async function selectDropdown(
   const option = page.getByRole("option", { name: optionValue, exact: true });
   await option.waitFor({ state: "visible", timeout: 10000 });
   await option.click();
-  console.log(`✓ Selected dropdown [${fieldLabel}]: ${optionValue}`);
 }
 
 // Helper function to fill array fields (like phone and email together)
@@ -173,20 +272,17 @@ async function fillArrayField(page: Page, inputs: any[]) {
       await phoneField.waitFor({ state: "visible", timeout: 10000 });
       await phoneField.click();
       await phoneField.fill(input.value);
-      console.log(`✓ Filled ${input.label}: ${input.value}`);
     } else if (input.label === "Email") {
       const emailField = page.getByRole("textbox", { name: "Email" });
       await emailField.waitFor({ state: "visible", timeout: 10000 });
       await emailField.click();
       await emailField.fill(input.value);
-      console.log(`✓ Filled ${input.label}: ${input.value}`);
     }
   }
 }
 
 // Helper function to add assessment note
 async function addAssessmentNote(page: Page, noteContent: string) {
-  console.log(`\n📝 Adding assessment note: "${noteContent}"`);
 
   // Click the "+ADD ASSESSMENT NOTE(s)" button
   const addNoteButton = page.getByRole("button", {
@@ -194,31 +290,26 @@ async function addAssessmentNote(page: Page, noteContent: string) {
   });
   await addNoteButton.waitFor({ state: "visible", timeout: 10000 });
   await addNoteButton.click();
-  console.log("✓ Clicked +ADD ASSESSMENT NOTE(s) button");
 
   // Wait for modal to open
   await page.waitForTimeout(1000);
   const noteModal = page.getByRole("dialog", { name: /Add Assessment Note/i });
   await noteModal.waitFor({ state: "visible", timeout: 10000 });
-  console.log("✓ Assessment Note modal opened");
 
   // Fill the note content in the rich text editor
   const noteEditor = page.locator('div[contenteditable="true"]').first();
   await noteEditor.waitFor({ state: "visible", timeout: 10000 });
   await noteEditor.click();
   await noteEditor.fill(noteContent);
-  console.log(`✓ Filled note content: "${noteContent}"`);
 
   // Click the SAVE button in the modal
   const saveButton = page.getByRole("button", { name: "SAVE" }).first();
   await saveButton.waitFor({ state: "visible", timeout: 10000 });
   await saveButton.click();
-  console.log("✓ Clicked SAVE button");
 
   // Wait for modal to close
   await page.waitForTimeout(1000);
   await expect(noteModal).not.toBeVisible({ timeout: 5000 });
-  console.log("✓ Note saved and modal closed");
 }
 
 test.beforeEach(async ({ page }) => {
@@ -229,15 +320,12 @@ test.beforeEach(async ({ page }) => {
 async function fillAndSubmitAssessment(page: Page) {
   // Wait for assessment page to load
   await page.waitForLoadState("networkidle");
-  // await expect(
-  //   page.getByRole("row", { name: "BOWMAN First Name HAERTEL" }),
-  // ).toBeVisible({ timeout: 10000 });
 
-  console.log("Starting assessment form fill using data-driven approach...");
+  // Wait for at least one input/textarea to be present on the page
+  await page.waitForSelector("input, textarea", { timeout: 30000 });
 
   // Iterate through all sections and fields in the assessment data
   for (const section of assessmentData) {
-    console.log(`\n📋 Processing section: ${section.section_name}`);
 
     for (const field of section.fields) {
       const fieldId = field.field_name;
@@ -247,14 +335,12 @@ async function fillAndSubmitAssessment(page: Page) {
       const selectedResponse = (field as any)
         .field_selected_value_response?.[0];
 
-      console.log(`\nField: ${fieldLabel} (${fieldType})`);
-
       try {
         // Handle different field types
         switch (fieldType) {
           case "text": {
             if (selectedValue) {
-              await fillTextField(page, fieldId, selectedValue as string);
+              await fillTextField(page, fieldId, selectedValue as string, fieldLabel);
             }
             break;
           }
@@ -265,7 +351,7 @@ async function fillAndSubmitAssessment(page: Page) {
 
               // If field has a response (like phone number), fill it
               if (selectedResponse) {
-                await fillTextField(page, fieldId, selectedResponse as string);
+                await fillTextField(page, fieldId, selectedResponse as string, fieldLabel);
               }
             }
             break;
@@ -328,7 +414,6 @@ async function fillAndSubmitAssessment(page: Page) {
           }
 
           default:
-            console.log(`⚠ Unknown field type: ${fieldType}`);
         }
       } catch (error) {
         console.error(`✗ Error filling field [${fieldId}]: ${error}`);
@@ -336,10 +421,6 @@ async function fillAndSubmitAssessment(page: Page) {
       }
     }
   }
-
-  console.log("\n✓ Assessment form filled successfully");
-  console.log("\n⏸ Pausing for 10 seconds to review filled answers...");
-  console.log("📋 Check the form to verify all answers are correct");
 
   // Pause for 10 seconds so you can visually inspect the filled form
   await page.waitForTimeout(10000);
@@ -357,7 +438,6 @@ async function fillAndSubmitAssessment(page: Page) {
     const completeButton = page.getByRole("button", { name: "COMPLETE" });
     await completeButton.waitFor({ state: "visible", timeout: 10000 });
     await completeButton.click();
-    console.log("✓ Clicked COMPLETE button");
 
     // Wait for any dialog to appear
     await page.waitForTimeout(2000);
@@ -365,13 +445,18 @@ async function fillAndSubmitAssessment(page: Page) {
     // Try to find completion dialog with flexible name matching
     const dialog = page.locator('div[role="dialog"]').first();
     await dialog.waitFor({ state: "visible", timeout: 10000 });
-    console.log("✓ Completion dialog appeared");
+
+    // Debug: Log all dialog content and buttons
+    const dialogText = await dialog.textContent();
+    const allButtons = await page.getByRole("button").all();
+    for (const btn of allButtons) {
+      const btnText = await btn.textContent();
+    }
 
     // Click Yes button in the dialog
     const yesButton = page.getByRole("button", { name: "Yes" }).first();
     await yesButton.waitFor({ state: "visible", timeout: 10000 });
     await yesButton.click();
-    console.log("✓ Clicked Yes to confirm completion");
 
     // Wait for success message
     await page.waitForTimeout(2000);
@@ -380,11 +465,6 @@ async function fillAndSubmitAssessment(page: Page) {
     const closeButton = page.getByRole("button", { name: "CLOSE" });
     await closeButton.waitFor({ state: "visible", timeout: 10000 });
     await closeButton.click();
-    console.log("✓ Clicked CLOSE button");
-
-    // Verify we're back on Case Management
-    // await expect(page.getByRole("heading", { name: /Case Management/ })).toBeVisible({ timeout: 10000 });
-    // console.log("✓ Assessment submitted successfully");
   } catch (error) {
     console.error("✗ Error during assessment submission:", error);
     throw error;

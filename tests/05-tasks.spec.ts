@@ -77,11 +77,8 @@ async function navigateToTasksPage(page: Page) {
   await page.evaluate(() => new Promise(r => setTimeout(r, 500)));
 }
 
-test.beforeEach(async ({ page }) => {
-  await page.goto(BASE_URL);
-});
-
 test("Step 1: Launch the page and navigate to Tasks", async ({ page }) => {
+  await page.goto(BASE_URL);
   await navigateToTasksPage(page);
 
   // // Verify we can see tasks

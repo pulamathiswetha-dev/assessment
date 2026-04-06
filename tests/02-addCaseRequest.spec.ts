@@ -7,40 +7,34 @@ test.describe("Add Case Request", () => {
   const MEMBER_NUMBER = "25682743B-01";
   // const MEMBER_NUMBER = "1127127569-01";
 
-  test.beforeEach(async ({ page }) => {
-    // Navigate to app first (auth state will be automatically loaded)
-    // await page.goto(BASE_URL);
+  test("Complete full case request creation flow", async ({ page }) => {
+    // Navigate to Add Case Request page
     await navigateToAddCaseRequest(page);
-  });
-
-  test("Search for member by Member Number input field in page", async ({ page }) => {
+    // STEP 1: Verify Member Number input field is visible
     const memberNumberInput = page.getByRole("textbox", {
       name: "Member Number",
     });
     await memberNumberInput.waitFor({ state: "visible", timeout: 30000 });
     await expect(memberNumberInput).toBeVisible({ timeout: 30000 });
-  });
+    console.log("✓ Member Number input field found");
 
-  test("Search for member by Member Number", async ({ page }) => {
+    // STEP 2: Search for member by Member Number
     await searchMemberByNumber(page, MEMBER_NUMBER);
 
     // Wait for member search results - check for radio button or other member selection element
     const radioButton = page.getByRole("radio");
     await radioButton.waitFor({ state: "visible", timeout: 30000 });
     await expect(radioButton).toBeVisible({ timeout: 30000 });
-  });
+    console.log("✓ Member search results displayed");
 
-  test("Select member from search results", async ({ page }) => {
-    await searchMemberByNumber(page, MEMBER_NUMBER);
+    // STEP 3: Select member from search results
     await selectMemberFromResults(page);
 
-    const radioButton = page.getByRole("radio");
-    await expect(radioButton).toBeChecked({ timeout: 30000 });
-  });
+    const radioButtonChecked = page.getByRole("radio");
+    await expect(radioButtonChecked).toBeChecked({ timeout: 30000 });
+    console.log("✓ Member selected from results");
 
-  test("Select Referral Source for case request", async ({ page }) => {
-    await searchMemberByNumber(page, MEMBER_NUMBER);
-    await selectMemberFromResults(page);
+    // STEP 4: Select Referral Source for case request
     await selectReferralSource(page);
 
     const referralSourceCombo = page.getByRole("combobox", {
@@ -49,13 +43,9 @@ test.describe("Add Case Request", () => {
     await expect(referralSourceCombo).toHaveValue("AVP Case Management", {
       timeout: 30000,
     });
-  });
+    console.log("✓ Referral Source selected");
 
-  test("Create Case Request and verify success", async ({ page }) => {
-    await searchMemberByNumber(page, MEMBER_NUMBER);
-    await selectMemberFromResults(page);
-    await selectReferralSource(page);
-
+    // STEP 5: Create Case Request and verify success
     const createButton = page.getByRole("button", {
       name: "CREATE CASE REQUEST",
     });
@@ -95,34 +85,15 @@ test.describe("Add Case Request", () => {
     }
 
     writeFileSync("./caseId.txt", caseId);
-    console.log(`Case ID saved: ${caseId}`);
+    console.log(`✓ Case Request created successfully with Case ID: ${caseId}`);
   });
 
   // test("Close success message dialog", async ({ page }) => {
-  //   await searchMemberByNumber(page, MEMBER_NUMBER);
-  //   await selectMemberFromResults(page);
-  //   await selectReferralSource(page);
-
-  //   const createButton = page.getByRole("button", {
-  //     name: "CREATE CASE REQUEST",
-  //   });
-  //   await createButton.click();
-
-  //   // Wait for page to load after clicking create
-  //   await page.waitForLoadState("networkidle");
-  //   await page.waitForTimeout(1000);
-
-  //   // Wait for success message - it should contain "Case" and "ID" and have an ID
-  //   const successMessage = page.locator(
-  //     "text=/Case.*ID.*\\w+/",
-  //   );
-
-  //   await successMessage.waitFor({ state: "visible", timeout: 30000 });
-
   //   const closeButton = page.getByRole("button", { name: "CLOSE" });
   //   await closeButton.waitFor({ state: "visible", timeout: 30000 });
   //   await closeButton.click();
 
+  //   const successMessage = page.locator("text=/Case.*ID.*\\w+/");
   //   await expect(successMessage).not.toBeVisible({ timeout: 30000 });
   // });
 });
