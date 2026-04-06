@@ -1,9 +1,15 @@
 import { test, expect, Page } from "@playwright/test";
 import { getCaseIdFromFile } from "./helpers/fileHelper";
+import { BASE_URL } from "./helpers/config";
 import assessmentData from "./fixtures/assessmentData.json";
 
 // Helper function to navigate to Assessment List page
 async function navigateToAssessmentList(page: Page) {
+  // Navigate to app if not already there (auth state will be applied automatically)
+  if (page.url() === "about:blank") {
+    await page.goto(BASE_URL);
+  }
+
   // Navigate to Case Management
   const caseManagementButton = page.getByRole("button", {
     name: "Case Management route_to",
