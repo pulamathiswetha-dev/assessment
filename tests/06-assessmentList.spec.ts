@@ -1,6 +1,5 @@
 import { test, expect, Page } from "@playwright/test";
 import { getCaseIdFromFile } from "./helpers/fileHelper";
-import { BASE_URL } from "./helpers/config";
 import assessmentData from "./fixtures/assessmentData.json";
 
 // Helper function to navigate to Assessment List page
@@ -311,10 +310,6 @@ async function addAssessmentNote(page: Page, noteContent: string) {
   await page.waitForTimeout(1000);
   await expect(noteModal).not.toBeVisible({ timeout: 5000 });
 }
-
-test.beforeEach(async ({ page }) => {
-  await page.goto(BASE_URL);
-});
 
 // Data-driven helper function to fill and submit assessment form
 async function fillAndSubmitAssessment(page: Page) {

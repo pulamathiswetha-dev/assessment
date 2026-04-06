@@ -80,10 +80,6 @@ async function navigateToTasksPage(page: Page) {
 test("Step 1: Launch the page and navigate to Tasks", async ({ page }) => {
   await page.goto(BASE_URL);
   await navigateToTasksPage(page);
-
-  // // Verify we can see tasks
-  // const tasksHeading = page.locator("heading");
-  // await expect(tasksHeading).toHaveCount(1, { timeout: 10000 });
 });
 
 test("Step 2: Complete Case Request Task", async ({ page }) => {
@@ -103,20 +99,6 @@ test("Step 3: Complete First Initial Outreach Task", async ({ page }) => {
   await page.waitForLoadState("networkidle", { timeout: 10000 }).catch(() => null);
   await page.evaluate(() => new Promise((r) => setTimeout(r, 1000)));
 
-  console.log("\n📌 === STARTING FIRST INITIAL OUTREACH TASK ===");
-
-  // Show what tasks are visible BEFORE
-  console.log("\n📋 === TASKS BEFORE COMPLETION ===");
-  const tasksBefore = await page
-    .locator("div[class*='card'], div[class*='task'], [role='article']")
-    .allTextContents()
-    .catch(() => []);
-  console.log(`Total tasks visible: ${tasksBefore.length}`);
-  tasksBefore.slice(0, 3).forEach((task, idx) => {
-    const taskText = task.split("\n")[0].substring(0, 80);
-    console.log(`  ${idx + 1}. ${taskText}`);
-  });
-
   const completed = await completeTask(
     page,
     "First Initial Outreach",
@@ -124,32 +106,13 @@ test("Step 3: Complete First Initial Outreach Task", async ({ page }) => {
   );
 
   // Show what tasks are visible AFTER
-  console.log("\n📋 === TASKS AFTER COMPLETION ===");
   await page.evaluate(() => new Promise((r) => setTimeout(r, 1000)));
-  const tasksAfter = await page
-    .locator("div[class*='card'], div[class*='task'], [role='article']")
-    .allTextContents()
-    .catch(() => []);
-  console.log(`Total tasks visible: ${tasksAfter.length}`);
-  tasksAfter.slice(0, 3).forEach((task, idx) => {
-    const taskText = task.split("\n")[0].substring(0, 80);
-    console.log(`  ${idx + 1}. ${taskText}`);
-  });
 
   if (completed) {
     console.log("\n✅ First Initial Outreach Task completed successfully!");
-    console.log(
-      `   Tasks removed: ${tasksBefore.length - tasksAfter.length}, Remaining: ${tasksAfter.length}`
-    );
   } else {
     console.log(
       "\n❌ First Initial Outreach Task NOT completed - task still visible in UI"
     );
-
-    // Take screenshot for debugging
-    await page.screenshot({ path: `debug-first-outreach-${Date.now()}.png` });
-    console.log("📸 Screenshot saved for debugging");
   }
-
-  console.log("📌 === FINISHED FIRST INITIAL OUTREACH TASK ===\n");
 });
